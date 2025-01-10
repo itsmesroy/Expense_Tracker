@@ -1,13 +1,14 @@
 import { useState } from "react";
 import "./App.css";
+import IncomeModal from "./components/IncomeModal.jsx"
+import ExpenseModal from "./components/ExpenseModal.jsx"
 
 function App() {
   const [walletBalance, setWalletBalance] = useState(5000);
   const [expenses, setExpenses] = useState([]);
   const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
   const [isIncomeModalOpen, setIsIncomeModalOpen] = useState(false);
-  const [isDeleteExpenseModalOpen, setIsDeleteExpenseModalOpen] =
-    useState(false);
+  const [isDeleteExpenseModalOpen, setIsDeleteExpenseModalOpen] =useState(false);
   const [expenseToEdit, setExpenseToEdit] = useState([]);
   const [expenseToDelete, setExpenseToDelete] = useState([]);
 
@@ -87,8 +88,14 @@ function App() {
 
         </div>
       </div>
-      <IncomeModal/>
-      <ExpenseModal/>
+      <IncomeModal
+      isOpen={isIncomeModalOpen}
+      onClose={closeIncomeModal}
+      addIncome={addIncome}/>
+      
+      <ExpenseModal
+      isOpen={isExpenseModalOpen}
+      onClose={closeExpenseModal}/>
     </div>
   );
 }
