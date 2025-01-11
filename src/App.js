@@ -1,7 +1,10 @@
 import { useState } from "react";
 import "./App.css";
-import IncomeModal from "./components/IncomeModal.jsx"
-import ExpenseModal from "./components/ExpenseModal.jsx"
+import IncomeModal from "./components/IncomeModal.js"
+import ExpenseModal from "./components/ExpenseModal.js"
+import Modal from "react-modal";
+import {useSnackbar} from 'notistack'
+Modal.setAppElement('#root');
 
 function App() {
   const [walletBalance, setWalletBalance] = useState(5000);
@@ -12,7 +15,7 @@ function App() {
   const [expenseToEdit, setExpenseToEdit] = useState([]);
   const [expenseToDelete, setExpenseToDelete] = useState([]);
 
-  const openIncomeModal = () => setIsIncomeModalOpen(true);
+  const openIncomeModal = () => { console.log("Opening Income Modal"); setIsIncomeModalOpen(true)};
   const closeIncomeModal = () => setIsIncomeModalOpen(false);
 
   const openExpenseModal = () => setIsExpenseModalOpen(true);
@@ -38,17 +41,40 @@ function App() {
     setWalletBalance(newWalletBalance);
     localStorage.setItem("WalletBalance", newWalletBalance);
   };
-  const editIncome = () => {};
+
+
+  const addExpense=(expense)=>{
+    const newExpense = { ...expense, id: new Date().getTime() };
+    const newExpenses = [...expenses, newExpense];
+    setExpenses(newExpenses);
+    localStorage.setItem("expenses", JSON.stringify(newExpenses))};
+
+  const editExpense=(updatedExpense)=>{
+    const updatedExpenses = expenses.map((expense) =>
+      expense.id === updatedExpense.id ? updatedExpense : expense
+    );
+    setExpenses(updatedExpenses);
+    localStorage.setItem("expenses", JSON.stringify(updatedExpenses))};
+
+    const removeExpense = (expenseId) => {
+      const updatedExpenses = expenses.filter(
+        (expense) => expense.id !== expenseId
+      );
+      setExpenses(updatedExpenses);
+      localStorage.setItem("expenses", JSON.stringify(updatedExpenses));
+      closeDeleteExpenseModal();
+    };
+  const {enqueueSnackbar} =useSnackbar();
   return (
     <div className="App">
-      <div className="Container">
         <h2>Expense Tracker</h2>
+      <div className="Container">
 
         <div className="row align-items-center ">
           <div className="col-md-6 text-start">
             <div className="wallet-balance">
               <h2>
-                <div>Wallet Balance:</div> ₹ {walletBalance}
+                <div>Wallet Balance: ₹ {walletBalance}</div>
               </h2>
               <button
                 className="button"
@@ -95,7 +121,12 @@ function App() {
       
       <ExpenseModal
       isOpen={isExpenseModalOpen}
-      onClose={closeExpenseModal}/>
+      onClose={closeExpenseModal}
+      addExpense={addExpense}
+      editExpense={editExpense}
+      expenseToEdit={expenseToEdit}
+      walletBalance={walletBalance}
+      enqueueSnackbar={enqueueSnackbar}/>
     </div>
   );
 }

@@ -19,11 +19,43 @@ h2{
 }
 .row{
   background-color: #595959;  
-  border-radius: 15px;
-  margin: px;
+  border-radius: 40px;
+  margin: 10px;
 }
 .button{
   
   border-radius: 7px;
   border: 20px;
+}
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  max-width: 500px;
+  width: 100%;
+  z-index: 1000;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(78, 69, 69, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  z-index: 1000;
+}
+
+.modal-overlay.open {
+  opacity: 1;
 }
